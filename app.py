@@ -4,14 +4,6 @@ from langchain_experimental.agents.agent_toolkits.pandas.base import create_pand
 import pandas as pd
 from openai import OpenAI
 from flask import Flask, request, jsonify
-from dotenv import load_dotenv
-import os
-
-# Load environment variables from .env
-load_dotenv()
-
-# Access your API key
-api_key = os.getenv('OPENAI_API_KEY')
 
 
 # Create the Flask app
@@ -19,7 +11,7 @@ app = Flask(__name__)
 
 
 iris = pd.read_excel('Dummy Dataset for Challenge #1.xlsx','Database')
-chat = ChatOpenAI(openai_api_key = api_key, model_name='gpt-3.5-turbo', temperature=0.0)
+chat = ChatOpenAI(openai_api_key = 'sk-proj-rJvmJxvh41IEBqayQHDoT3BlbkFJNxU6XbxwSBqDOVKGFr49', model_name='gpt-3.5-turbo', temperature=0.0)
 
 agent = create_pandas_dataframe_agent(chat, iris, verbose=True, allow_dangerous_code=True)
 @app.route('/chat', methods=['POST'])
