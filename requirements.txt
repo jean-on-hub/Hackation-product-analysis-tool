@@ -29,7 +29,7 @@ h11==0.14.0
 httpcore==1.0.5
 httpx==0.27.0
 idna==3.7
-ipykernel==6.29.5
+ipykernel
 ipython==8.26.0
 itsdangerous==2.2.0
 jedi==0.19.1
