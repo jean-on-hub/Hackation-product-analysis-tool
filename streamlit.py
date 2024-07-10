@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 import os
 from langchain_community.chat_models import ChatOpenAI
 from langchain_experimental.agents.agent_toolkits.pandas.base import create_pandas_dataframe_agent
