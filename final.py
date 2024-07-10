@@ -11,14 +11,14 @@ load_dotenv()
 # Access your API key
 api_key = os.getenv('OPENAI_API_KEY')
 
-# Print the API key once to check if it's correctly loaded
-if api_key:
-    print(f"Loaded API key: {api_key}")
-else:
-    print("Failed to load API key.")
-dotenv_path = find_dotenv()
-if dotenv_path:
-    load_dotenv(dotenv_path, override=True)
+# # Print the API key once to check if it's correctly loaded
+# if api_key:
+#     print(f"Loaded API key: {api_key}")
+# else:
+#     print("Failed to load API key.")
+# dotenv_path = find_dotenv()
+# if dotenv_path:
+#     load_dotenv(dotenv_path, override=True)
 
 print(os.getenv('MY_API_KEY'))
 # Load the dataset
