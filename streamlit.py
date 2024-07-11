@@ -71,12 +71,12 @@ def main():
                         for df in st.session_state['dataframes'][i]:
                             st.dataframe(df)
 
-                for i in range(len(thought)):
-                    st.sidebar.write(f"Thought: {thought[i]}")
-                    st.sidebar.write(f"Action: {action[i]}")
-                    st.sidebar.write(f"Action Input: {action_input[i]}")
-                    st.sidebar.write(f"Observation: {observation[i]}")
-                    st.sidebar.write('====')
+                # for i in range(len(thought)):
+                #     st.sidebar.write(f"Thought: {thought[i]}")
+                #     st.sidebar.write(f"Action: {action[i]}")
+                #     st.sidebar.write(f"Action Input: {action_input[i]}")
+                #     st.sidebar.write(f"Observation: {observation[i]}")
+                #     st.sidebar.write('====')
             except Exception as e:
                 st.error(f"Error: {str(e)}")
         else:
