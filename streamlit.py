@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 from dotenv import load_dotenv
 import os
-import matplotlib.pyplot as plt
 from functions import *
 from langchain_community.chat_models import ChatOpenAI
 from langchain_experimental.agents.agent_toolkits.pandas.base import create_pandas_dataframe_agent
@@ -28,7 +27,7 @@ def main():
 
     # Create the chatbot agent
     chat = ChatOpenAI(openai_api_key=api_key, model_name='gpt-3.5-turbo', temperature=0.0)
-    agent = create_pandas_dataframe_agent(chat, iris, return_intermediate_steps=True, save_charts=True, verbose=True, allow_dangerous_code=True)
+    agent = create_pandas_dataframe_agent(chat, iris, return_intermediate_steps=True, verbose=True, allow_dangerous_code=True)
 
     # Set up the Streamlit app
     st.title('Chatbot with Streamlit')
@@ -41,18 +40,18 @@ def main():
     if st.button('Ask'):
         if user_input:
             try:
-                response, thought, action, action_input, observation, created_images = run_query(agent, user_input)
+                response, thought, action, action_input, observation, plot_objects = run_query(agent, user_input)
                 st.session_state.past.append(user_input)
                 st.session_state.generated.append(response)
-                st.session_state.images.append(created_images)
+                st.session_state.plots.append(plot_objects)
 
                 for i in range(len(st.session_state['generated']) - 1, -1, -1):
                     message(st.session_state["generated"][i], key=str(i))
                     message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')
 
-                    if st.session_state['images'][i]:
-                        for img_path in st.session_state['images'][i]:
-                            st.image(img_path, caption=img_path, use_column_width=True)
+                    if st.session_state['plots'][i]:
+                        for plot in st.session_state['plots'][i]:
+                            st.pyplot(plot)
 
                 for i in range(len(thought)):
                     st.sidebar.write(f"Thought: {thought[i]}")
@@ -72,10 +71,7 @@ if __name__ == "__main__":
     if 'past' not in st.session_state:
         st.session_state['past'] = []
 
-    if 'images' not in st.session_state:
-        st.session_state['images'] = []
+    if 'plots' not in st.session_state:
+        st.session_state['plots'] = []
 
     main()
-
-    # Clear session state at the end of the session
-    st.session_state.clear()

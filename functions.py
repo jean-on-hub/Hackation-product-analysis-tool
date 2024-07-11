@@ -5,12 +5,6 @@ import pandas as pd
 import json
 from datetime import datetime
 import matplotlib.pyplot as plt
-import seaborn as sns
-
-def save_chart(query):
-    q_s = ' If any charts, graphs, or plots were created using matplotlib or seaborn, save them locally and include the save file names in your response.'
-    query += ' . ' + q_s
-    return query
 
 def load_dataframe():
     selected_df = []
@@ -32,17 +26,15 @@ def load_dataframe():
     return selected_df, selected_df_names
 
 def run_query(agent, query_):
-    if any(keyword in query_ for keyword in ['chart', 'charts', 'graph', 'graphs', 'plot', 'plt']):
-        query_ = save_chart(query_)
     output = agent(query_)
     response, intermediate_steps = output['output'], output['intermediate_steps']
     thought, action, action_input, observation, steps = decode_intermediate_steps(intermediate_steps)
     store_convo(query_, steps, response)
-
-    # Collect created image paths
-    created_images = glob.glob('*.png') + glob.glob('*.jpg') + glob.glob('*.jpeg')
     
-    return response, thought, action, action_input, observation, created_images
+    # Extract plot objects if any
+    plot_objects = extract_plot_objects(intermediate_steps)
+    
+    return response, thought, action, action_input, observation, plot_objects
 
 def decode_intermediate_steps(steps):
     log, thought_, action_, action_input_, observation_ = [], [], [], [], []
@@ -56,6 +48,14 @@ def decode_intermediate_steps(steps):
         log.append(action_details.log)
         text = action_details.log + ' Observation: {}'.format(step[1])
     return thought_, action_, action_input_, observation_, text
+
+def extract_plot_objects(intermediate_steps):
+    plot_objects = []
+    for step in intermediate_steps:
+        action_details = step[0]
+        if 'plot' in action_details.log or 'chart' in action_details.log or 'graph' in action_details.log:
+            plot_objects.append(plt.gcf())
+    return plot_objects
 
 def get_convo():
     convo_file = 'convo_history.json'
