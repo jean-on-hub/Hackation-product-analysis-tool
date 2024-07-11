@@ -30,8 +30,17 @@ def main():
     agent = create_pandas_dataframe_agent(chat, iris, return_intermediate_steps=True, verbose=True, allow_dangerous_code=True)
 
     # Set up the Streamlit app
-    st.title('Chatbot with Streamlit')
+    st.title('Welcome to ChatInsights')
     st.write("Ask a question to the chatbot")
+
+    # Explain subscription tiers
+    st.sidebar.title("Subscription Tiers")
+    st.sidebar.write("### Free Tier:")
+    st.sidebar.write("- Access to basic chatbot features")
+    st.sidebar.write("- Display of dataframes")
+    st.sidebar.write("### Pro Tier:")
+    st.sidebar.write("- Access to all Free Tier features")
+    st.sidebar.write("- Display of generated graphs and plots")
 
     # Subscription selection
     subscription_tier = st.sidebar.selectbox("Select your subscription tier:", ("Free", "Pro"))
