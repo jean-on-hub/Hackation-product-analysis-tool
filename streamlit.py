@@ -33,6 +33,9 @@ def main():
     st.title('Chatbot with Streamlit')
     st.write("Ask a question to the chatbot")
 
+    # Subscription selection
+    subscription_tier = st.sidebar.selectbox("Select your subscription tier:", ("Free", "Pro"))
+
     # User input
     x = 0
     user_input = get_text(x)
@@ -40,18 +43,24 @@ def main():
     if st.button('Ask'):
         if user_input:
             try:
-                response, thought, action, action_input, observation, plot_objects = run_query(agent, user_input)
+                response, thought, action, action_input, observation, plot_objects, dataframe_objects = run_query(agent, user_input)
                 st.session_state.past.append(user_input)
                 st.session_state.generated.append(response)
                 st.session_state.plots.append(plot_objects)
+                st.session_state.dataframes.append(dataframe_objects)
 
                 for i in range(len(st.session_state['generated']) - 1, -1, -1):
                     message(st.session_state["generated"][i], key=str(i))
                     message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')
 
-                    if st.session_state['plots'][i]:
-                        for plot in st.session_state['plots'][i]:
-                            st.pyplot(plot)
+                    if subscription_tier == "Pro":
+                        if st.session_state['plots'][i]:
+                            for plot in st.session_state['plots'][i]:
+                                st.pyplot(plot)
+                    
+                    if st.session_state['dataframes'][i]:
+                        for df in st.session_state['dataframes'][i]:
+                            st.dataframe(df)
 
                 for i in range(len(thought)):
                     st.sidebar.write(f"Thought: {thought[i]}")
@@ -73,5 +82,8 @@ if __name__ == "__main__":
 
     if 'plots' not in st.session_state:
         st.session_state['plots'] = []
+
+    if 'dataframes' not in st.session_state:
+        st.session_state['dataframes'] = []
 
     main()

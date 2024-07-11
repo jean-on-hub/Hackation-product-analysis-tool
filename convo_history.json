@@ -320,5 +320,12 @@
             "Answer": "To show a graph of sales over time, plot the 'Sales_Value' column against the 'Period' column using a line plot.",
             "Steps": "Thought: To show a graph of sales over time, we need to plot the 'Sales_Value' column against the 'Period' column.\nAction: python_repl_ast\nAction Input: df.plot(x='Period', y='Sales_Value', kind='line') Observation: Axes(0.125,0.2;0.775x0.68)"
         }
+    ],
+    "2024-07-11 15:53:37.566630": [
+        {
+            "Question": "show top 5 rows",
+            "Answer": "The top 5 rows of the dataframe `df` have been displayed.",
+            "Steps": "Thought: To show the top 5 rows of the dataframe, I can use the `head()` function in pandas.\nAction: python_repl_ast\nAction Input: df.head() Observation:       Period     City   Channel Category    Segment  ... Pack_Size Packaging Unit_Price Sales_Volume(KG_LTRS)   Sales_Value\n0 2021-01-01  Abidjan  Boutique    PASTA  DRY PASTA  ...      200G    SACHET    89.0625             66795.658  2.128648e+07\n1 2021-01-01  Abidjan  Boutique    PASTA  DRY PASTA  ...      200G    SACHET    99.7500             72729.168  2.658084e+07\n2 2021-01-01  Abidjan  Boutique    PASTA  DRY PASTA  ...      200G    SACHET    99.7500             56039.689  2.048124e+07\n3 2021-01-01  Abidjan  Boutique    PASTA  DRY PASTA  ...      200G    SACHET    99.7500             18220.535  6.659200e+06\n4 2021-01-01  Abidjan  Boutique    PASTA  DRY PASTA  ...      200G    SACHET    99.7500            376047.594  1.363817e+08\n\n[5 rows x 13 columns]"
+        }
     ]
 }

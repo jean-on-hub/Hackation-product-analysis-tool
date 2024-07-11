@@ -4,7 +4,6 @@ from langchain_experimental.agents.agent_toolkits.pandas.base import create_pand
 import pandas as pd
 import json
 from datetime import datetime
-import matplotlib.pyplot as plt
 
 def load_dataframe():
     selected_df = []
@@ -31,10 +30,11 @@ def run_query(agent, query_):
     thought, action, action_input, observation, steps = decode_intermediate_steps(intermediate_steps)
     store_convo(query_, steps, response)
     
-    # Extract plot objects if any
+    # Extract plot and dataframe objects if any
     plot_objects = extract_plot_objects(intermediate_steps)
+    dataframe_objects = extract_dataframe_objects(intermediate_steps)
     
-    return response, thought, action, action_input, observation, plot_objects
+    return response, thought, action, action_input, observation, plot_objects, dataframe_objects
 
 def decode_intermediate_steps(steps):
     log, thought_, action_, action_input_, observation_ = [], [], [], [], []
@@ -56,6 +56,13 @@ def extract_plot_objects(intermediate_steps):
         if 'plot' in action_details.log or 'chart' in action_details.log or 'graph' in action_details.log:
             plot_objects.append(plt.gcf())
     return plot_objects
+
+def extract_dataframe_objects(intermediate_steps):
+    dataframe_objects = []
+    for step in intermediate_steps:
+        if isinstance(step[1], pd.DataFrame):
+            dataframe_objects.append(step[1])
+    return dataframe_objects
 
 def get_convo():
     convo_file = 'convo_history.json'
