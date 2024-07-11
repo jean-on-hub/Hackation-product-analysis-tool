@@ -4,6 +4,7 @@ from langchain_experimental.agents.agent_toolkits.pandas.base import create_pand
 import pandas as pd
 import json
 from datetime import datetime
+import matplotlib.pyplot as plt
 
 def load_dataframe():
     selected_df = []
