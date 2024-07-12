@@ -11,7 +11,7 @@ from streamlit_chat import message
 load_dotenv()
 
 def get_text(n):
-    input_text = st.text_input('Type your question here', '', key="input{}".format(n))
+    input_text = st.text_input('Type your question here.', '', key="input{}".format(n))
     return input_text
 
 def main():
@@ -31,7 +31,7 @@ def main():
 
     # Set up the Streamlit app
     st.title('Welcome to ChatInsights')
-    st.write("Ask a question to the chatbot based on the dummy dataset provided for the hackaton")
+    st.write("Ask a question to the chatbot based on the dummy dataset provided for the hackathon.")
 
     # Explain subscription tiers
     st.sidebar.title("Subscription Tiers")
