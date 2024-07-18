@@ -37,4 +37,4 @@ streamlit-chat==0.0.2.2
 matplotlib == 3.9.0
 seaborn ==  0.13.2
 sounddevice == 0.4.7
-wavio == 0.0.9
+wavio = 0.0.9
