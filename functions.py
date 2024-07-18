@@ -5,6 +5,9 @@ import pandas as pd
 import json
 from datetime import datetime
 import matplotlib.pyplot as plt
+from openai import OpenAI
+client = OpenAI()
+import streamlit as st
 
 def load_dataframe():
     selected_df = []
@@ -56,6 +59,7 @@ def extract_plot_objects(intermediate_steps):
         action_details = step[0]
         if 'plot' in action_details.log or 'chart' in action_details.log or 'graph' in action_details.log:
             plot_objects.append(plt.gcf())
+    plt.close('all')  # Close all figures to prevent re-plotting
     return plot_objects
 
 def extract_dataframe_objects(intermediate_steps):
@@ -79,3 +83,57 @@ def store_convo(query, response_, response):
 
     with open(convo_file, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
+
+def format_sales_figures(df):
+    # Assuming the column to format is named 'sales'
+    if 'sales' in df.columns:
+        df['sales'] = df['sales'].apply(lambda x: "{:,.2f}".format(x))
+    return df
+
+def load_csv_with_error_handling(file):
+    encodings = ['utf-8', 'latin1', 'ISO-8859-1']
+    for encoding in encodings:
+        try:
+            df = pd.read_csv(file, encoding=encoding)
+            return df
+        except Exception as e:
+            continue
+    st.error(f"Failed to read the file {file.name} with the available encodings.")
+    return None
+
+
+
+def get_text(n):
+    input_text = st.text_input('Type your question here.', '', key="input{}".format(n), on_change=submit_question, args=(n,))
+    return input_text
+
+def submit_question(n):
+    if st.session_state.get(f'input{n}', ''):
+        st.session_state['user_input'] = st.session_state[f'input{n}']
+        st.session_state[f'input{n}'] = ''
+
+
+
+def transcribe_audio(file_path):
+    audio_file = open(file_path, "rb")
+    transcription = client.audio.transcriptions.create(
+  model="whisper-1", 
+  file=audio_file,
+  response_format="text"
+)
+    return transcription
+
+def text_to_speech(text):
+   with   client.audio.speech.with_streaming_response.create(
+  model="tts-1",
+  voice="alloy",
+  input=text,
+  response_format='aac'
+) as response:
+    response.stream_to_file("response.mp3")
+    
+    return "response.mp3"
+
+def play_audio(file_path):
+    audio_file = open(file_path, "rb")
+    st.audio(audio_file.read(), format="audio/mp3")
